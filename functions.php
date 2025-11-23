@@ -90,7 +90,7 @@ function getProjectStats($project_id, $pdo) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-// تابع کمکی برای تولید کد دعوت
+// ✅ تابع generateInviteCode فقط در اینجا نگه داشته شده
 function generateInviteCode() {
     return strtoupper(substr(md5(uniqid()), 0, 8));
 }

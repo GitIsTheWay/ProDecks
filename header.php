@@ -34,12 +34,19 @@
                         <a class="nav-link" href="logout.php">خروج</a>
                     </li>
                     <?php else: ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.php">ورود</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.php">ثبت نام</a>
-                    </li>
+                    <!-- دکمه‌های ورود و ثبت نام بهبود یافته -->
+                    <div class="d-flex gap-2 auth-buttons">
+                        <li class="nav-item">
+                            <a class="nav-link btn-auth btn-login" href="login.php">
+                                <i class="fas fa-sign-in-alt me-2"></i>ورود
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-auth btn-register" href="register.php">
+                                <i class="fas fa-user-plus me-2"></i>ثبت نام
+                            </a>
+                        </li>
+                    </div>
                     <?php endif; ?>
                 </ul>
             </div>

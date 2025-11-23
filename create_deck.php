@@ -1,5 +1,5 @@
 <?php
-// create_deck.php
+// create_deck.php - ایجاد Deck جدید در Space
 include 'includes/config.php';
 include 'includes/functions.php';
 
@@ -32,13 +32,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $position = $result['max_pos'] + 1;
         
         // Insert new deck
-        $stmt = $pdo->prepare("INSERT INTO decks (space_id, name, description, color, position) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("
+            INSERT INTO decks (space_id, name, description, color, position) 
+            VALUES (?, ?, ?, ?, ?)
+        ");
         $stmt->execute([$space_id, $name, $description, $color, $position]);
         
         // Add experience
         addExperience($user_id, 5, $pdo);
         
-        header("Location: space_decks.php?id=" . $space_id);
+        header("Location: space_decks.php?id=" . $space_id . "&success=deck_created");
         exit;
     }
 }

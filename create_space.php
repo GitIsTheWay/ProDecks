@@ -1,6 +1,8 @@
 <?php
 // create_space.php
+session_start();
 include 'includes/config.php';
+include 'includes/auth.php';
 include 'includes/functions.php';
 
 if (!isLoggedIn()) {
@@ -16,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user_id = $_SESSION['user_id'];
     
     if (!empty($name)) {
-        // Generate unique invite code
+        // Generate unique invite code - استفاده از تابع از functions.php
         $invite_code = generateInviteCode();
         
         // Create space
@@ -44,8 +46,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 header("Location: spaces_manager.php");
 exit;
-
-function generateInviteCode() {
-    return strtoupper(substr(md5(uniqid()), 0, 8));
-}
 ?>

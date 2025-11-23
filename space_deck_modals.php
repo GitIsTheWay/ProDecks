@@ -8,7 +8,7 @@
                 <h5 class="modal-title">ایجاد Deck جدید</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="create_deck.php" method="post">
+            <form action="create_deck.php" method="post" id="createDeckForm">
                 <input type="hidden" name="space_id" value="<?php echo $space_id; ?>">
                 <div class="modal-body">
                     <div class="mb-3">
@@ -35,6 +35,42 @@
     </div>
 </div>
 
+<!-- Edit Deck Modal -->
+<div class="modal fade modal-enhanced" id="editDeckModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ویرایش Deck</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="edit_deck.php" method="post" id="editDeckForm">
+                <input type="hidden" name="space_id" value="<?php echo $space_id; ?>">
+                <input type="hidden" id="edit_deck_id" name="deck_id">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="edit_deck_name" class="form-label">نام Deck</label>
+                        <input type="text" class="form-control" id="edit_deck_name" name="name" required 
+                               placeholder="نام Deck">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_deck_description" class="form-label">توضیحات</label>
+                        <textarea class="form-control" id="edit_deck_description" name="description" rows="2"
+                                  placeholder="توضیحات اختیاری..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_deck_color" class="form-label">رنگ Deck</label>
+                        <input type="color" class="form-control" id="edit_deck_color" name="color" value="#4a5568">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-gradient">ذخیره تغییرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Add Card Modal -->
 <div class="modal fade modal-enhanced" id="addCardModal" tabindex="-1">
     <div class="modal-dialog">
@@ -43,7 +79,7 @@
                 <h5 class="modal-title">افزودن Card جدید</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="add_card.php" method="post">
+            <form action="add_card.php" method="post" id="addCardForm">
                 <input type="hidden" name="space_id" value="<?php echo $space_id; ?>">
                 <input type="hidden" id="card_deck_id" name="deck_id">
                 <div class="modal-body">
@@ -111,7 +147,7 @@
                 <h5 class="modal-title">افزودن Subcard جدید</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="add_subcard.php" method="post">
+            <form action="add_subcard.php" method="post" id="addSubcardForm">
                 <input type="hidden" name="space_id" value="<?php echo $space_id; ?>">
                 <input type="hidden" id="subcard_parent_id" name="parent_card_id">
                 <div class="modal-body">
@@ -170,7 +206,7 @@
                 <h5 class="modal-title">ویرایش Card</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="edit_card.php" method="post">
+            <form action="edit_card.php" method="post" id="editCardForm">
                 <input type="hidden" name="space_id" value="<?php echo $space_id; ?>">
                 <input type="hidden" id="edit_card_id" name="card_id">
                 <div class="modal-body" id="editCardModalBody">

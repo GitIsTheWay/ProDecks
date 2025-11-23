@@ -12,6 +12,7 @@
     --deck-bg: #2d3748;
     --card-bg: #4a5568;
     --accent-color: #ff6b6b;
+    --red-text: #dc3545;
 }
 
 /* استایل‌های پایه */
@@ -20,6 +21,138 @@ body {
     background: var(--primary-gradient);
     min-height: 100vh;
     line-height: 1.6;
+}
+
+/* استایل‌های جدید برای تغییرات درخواستی */
+
+/* دکمه‌های ورود و ثبت نام در نوار بالایی */
+.auth-buttons {
+    direction: ltr;
+}
+
+.btn-auth {
+    padding: 10px 20px !important;
+    border-radius: 25px !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+    border: 2px solid transparent !important;
+}
+
+.btn-login {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-login:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+}
+
+.btn-register {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important;
+    color: white !important;
+    border-color: #ff6b6b !important;
+}
+
+.btn-register:hover {
+    background: linear-gradient(135deg, #ee5a24, #ff6b6b) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+}
+
+/* متن‌های قرمز در باکس‌های صفحه اصلی - استایل‌های قوی */
+.feature-title,
+.stats-title,
+.step-title,
+.feature-text,
+.stats-text {
+    color: var(--red-text) !important;
+}
+
+.feature-title,
+.stats-title {
+    font-weight: 700 !important;
+    font-size: 1.2rem !important;
+    margin-bottom: 15px !important;
+}
+
+.step-title {
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    margin-top: 10px !important;
+}
+
+.feature-text,
+.stats-text {
+    font-weight: 500 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+}
+
+.stats-title {
+    font-size: 1.5rem !important;
+}
+
+.stats-text {
+    font-size: 1rem !important;
+}
+
+/* تضمین نمایش قرمز حتی با specificity بالا */
+.hero-section .feature-card .feature-title,
+.hero-section .feature-card .feature-text,
+.hero-section .stats-card .stats-title,
+.hero-section .stats-card .stats-text,
+.hero-section .step .step-title {
+    color: var(--red-text) !important;
+}
+
+/* بهبود ریسپانسیو برای دکمه‌ها */
+@media (max-width: 768px) {
+    .auth-buttons {
+        flex-direction: column;
+        gap: 10px !important;
+        margin-top: 10px;
+    }
+    
+    .btn-auth {
+        text-align: center;
+        padding: 8px 15px !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .feature-title {
+        font-size: 1.1rem !important;
+    }
+    
+    .feature-text {
+        font-size: 0.9rem !important;
+    }
+    
+    .stats-title {
+        font-size: 1.3rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-nav .btn-auth {
+        margin: 5px 0;
+    }
+    
+    .feature-title {
+        font-size: 1rem !important;
+    }
+    
+    .stats-title {
+        font-size: 1.2rem !important;
+    }
+    
+    .step-title {
+        font-size: 0.75rem !important;
+    }
 }
 
 /* هیرو سکشن */
@@ -70,17 +203,6 @@ body {
     margin-bottom: 20px;
 }
 
-.feature-card h5 {
-    color: #2d3748;
-    font-weight: 700;
-    margin-bottom: 15px;
-}
-
-.feature-card p {
-    color: #4a5568;
-    font-size: 0.9rem;
-}
-
 /* کارت‌های آمار */
 .stats-card {
     background: rgba(255, 255, 255, 0.95);
@@ -106,17 +228,6 @@ body {
     margin-bottom: 20px;
 }
 
-.stats-card h3 {
-    color: #2d3748;
-    font-weight: 700;
-    margin-bottom: 15px;
-}
-
-.stats-card p {
-    color: #4a5568;
-    font-size: 1rem;
-}
-
 /* مراحل */
 .step {
     text-align: center;
@@ -135,12 +246,6 @@ body {
     margin: 0 auto 10px;
     font-weight: bold;
     font-size: 1rem;
-}
-
-.step h6 {
-    color: white;
-    font-size: 0.8rem;
-    margin: 0;
 }
 
 /* سیستم Spaces و Decks پیشرفته */
@@ -352,31 +457,545 @@ body {
     background: var(--secondary-gradient);
 }
 
-/* ریسپانسیو */
-@media (max-width: 768px) {
-    .hero-section {
-        padding: 80px 0 50px;
-    }
-    
-    .feature-card, .stats-card {
-        margin-bottom: 20px;
-    }
-    
-    .deck-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .step h6 {
-        font-size: 0.7rem;
-    }
+/* استایل‌های عمومی */
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 1.5rem;
 }
 
-@media (max-width: 576px) {
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+/* دک‌ها در صفحه پروژه */
+.deck-card {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    min-height: 500px;
+}
+
+.deck-card .card-header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 12px 12px 0 0 !important;
+    border: none;
+    padding: 15px 20px;
+}
+
+.deck-body {
+    min-height: 400px;
+    padding: 15px;
+    background: #f8fafc;
+    transition: all 0.3s ease;
+}
+
+.deck-body.drag-over {
+    background: #e2e8f0;
+    border: 2px dashed #667eea;
+}
+
+/* کارت‌های وظایف */
+.task-card {
+    background: white;
+    border-radius: 10px;
+    padding: 0;
+    margin-bottom: 12px;
+    cursor: move;
+    border-right: 4px solid var(--primary-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.task-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    transform: translateX(-5px);
+}
+
+.task-card.dragging {
+    opacity: 0.6;
+    transform: rotate(5deg);
+}
+
+.task-card .card-body {
+    padding: 15px;
+}
+
+/* وضعیت‌های مختلف کارت */
+.status-todo { border-right-color: var(--danger-color); }
+.status-doing { border-right-color: var(--warning-color); }
+.status-done { border-right-color: var(--success-color); }
+
+/* پیشرفت‌بار */
+.progress {
+    border-radius: 10px;
+    background: #e2e8f0;
+    height: 12px;
+}
+
+.progress-bar {
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+/* بخش هیرو */
+.hero-section {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9));
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
+    background-size: cover;
+}
+
+/* کارت‌های ویژگی */
+.feature-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 30px;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+}
+
+/* مراحل راهنما */
+.step {
+    text-align: center;
+    padding: 20px;
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* سیستم درگ و دراپ */
+.sortable-ghost {
+    opacity: 0.4;
+    background: #cbd5e0;
+}
+
+.draggable-card {
+    transition: all 0.3s ease;
+}
+
+/* اعلان‌ها */
+.alert {
+    border: none;
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+}
+
+/* ناوبری */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 15px 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+/* صفحه آموزش */
+.tutorial-section {
+    scroll-margin-top: 80px;
+    padding: 20px 0;
+}
+
+.tutorial-section h3 {
+    border-bottom: 3px solid var(--primary-color);
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    color: var(--dark-color);
+}
+
+.tutorial-demo {
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    border-right: 4px solid var(--primary-color);
+}
+
+/* جدول‌ها */
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.table thead th {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 15px;
+    font-weight: 600;
+}
+
+.table tbody td {
+    padding: 12px 15px;
+    border-color: #e2e8f0;
+}
+
+/* حالت ریسپانسیو */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 60px 0;
+    }
+    
     .hero-section h1 {
         font-size: 2rem;
     }
     
-    .feature-icon, .stats-icon {
-        font-size: 2.5rem;
+    .deck-card {
+        min-height: 300px;
+        margin-bottom: 20px;
     }
+    
+    .deck-body {
+        min-height: 200px;
+    }
+    
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .feature-card {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* انیمیشن‌ها */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes bounce {
+    0%, 20%, 53%, 80%, 100% {
+        transform: translate3d(0,0,0);
+    }
+    40%, 43% {
+        transform: translate3d(0,-10px,0);
+    }
+    70% {
+        transform: translate3d(0,-5px,0);
+    }
+    90% {
+        transform: translate3d(0,-2px,0);
+    }
+}
+
+.bounce {
+    animation: bounce 1s;
+}
+
+/* استایل‌های خاص برای گیمیفیکیشن */
+.level-badge {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.experience-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.experience-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #10b981, #059669);
+    transition: width 0.5s ease;
+}
+
+.achievement-popup {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+    z-index: 9999;
+    animation: slideInLeft 0.5s ease;
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* استایل‌های مودال */
+.modal-content {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 20px 20px 0 0 !important;
+    border: none;
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+/* اسکرول بار سفارشی */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+}
+
+/* استایل‌های جدید برای سیستم decks */
+.decks-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.deck-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.deck-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.deck-header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.deck-body {
+    min-height: 400px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: #f8fafc;
+    transition: all 0.3s ease;
+}
+
+.deck-body.drag-over {
+    background: #e2e8f0;
+    border: 2px dashed #667eea;
+}
+
+.task-card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-right: 4px solid #667eea;
+}
+
+.task-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateX(-2px);
+}
+
+.animated-card {
+    animation: slideInUp 0.3s ease;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.stat-card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-deck-column {
+    border: 2px dashed #cbd5e0;
+    background: #f7fafc;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-deck-column:hover {
+    border-color: #667eea;
+    background: #edf2f7;
+}
+
+/* انیمیشن‌های جدید */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.bounce-in {
+    animation: bounceIn 0.6s ease;
+}
+
+/* بهبود responsive */
+@media (max-width: 768px) {
+    .decks-board .row {
+        flex-direction: column;
+    }
+    
+    .decks-board .col-md-6 {
+        max-width: 100%;
+    }
+    
+    .deck-body {
+        min-height: 300px;
+        max-height: 50vh;
+    }
+}
+
+/* اسکرول بار سفارشی برای دک‌ها */
+.deck-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.deck-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.deck-body::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 3px;
+}
+
+.deck-body::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
 }

@@ -1,4 +1,4 @@
-// js/space_decks.js - سیستم پیشرفته مدیریت Decks و Cards
+// js/space_decks.js - سیستم پیشرفته مدیریت Decks و Cards - نسخه اصلاح شده
 class SpaceDecksManager {
     constructor() {
         this.draggedElement = null;
@@ -11,6 +11,17 @@ class SpaceDecksManager {
         this.initializeSortable();
         this.setupEventListeners();
         this.showWelcomeNotification();
+        this.handleSuccessMessages();
+    }
+
+    handleSuccessMessages() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'deck_created') {
+            this.showNotification('Deck جدید با موفقیت ایجاد شد', 'success');
+        }
+        if (urlParams.get('success') === 'deck_updated') {
+            this.showNotification('Deck با موفقیت ویرایش شد', 'success');
+        }
     }
 
     initializeDragAndDrop() {
@@ -82,11 +93,13 @@ class SpaceDecksManager {
                 handle: '.deck-header-advanced',
                 onEnd: (evt) => {
                     const deckOrder = [];
-                    document.querySelectorAll('[data-deck-id]').forEach((deck, index) => {
-                        deckOrder.push({
-                            deck_id: deck.dataset.deckId,
-                            position: index + 1
-                        });
+                    document.querySelectorAll('.deck-card-advanced[data-deck-id]').forEach((deck, index) => {
+                        if (deck.dataset.deckId) {
+                            deckOrder.push({
+                                deck_id: deck.dataset.deckId,
+                                position: index + 1
+                            });
+                        }
                     });
                     
                     this.updateDeckOrder(deckOrder);
@@ -134,6 +147,71 @@ class SpaceDecksManager {
                 }
             }
         });
+
+        // Form submissions with AJAX
+        this.setupAjaxForms();
+    }
+
+    setupAjaxForms() {
+        // Create Deck Form
+        const createDeckForm = document.getElementById('createDeckForm');
+        if (createDeckForm) {
+            createDeckForm.addEventListener('submit', this.handleCreateDeck.bind(this));
+        }
+
+        // Edit Deck Form
+        const editDeckForm = document.getElementById('editDeckForm');
+        if (editDeckForm) {
+            editDeckForm.addEventListener('submit', this.handleEditDeck.bind(this));
+        }
+    }
+
+    async handleCreateDeck(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        
+        try {
+            this.showLoading();
+            const response = await fetch('create_deck.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                window.location.href = await response.url;
+            } else {
+                this.showNotification('خطا در ایجاد Deck', 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            this.showNotification('خطا در ارتباط با سرور', 'error');
+        } finally {
+            this.hideLoading();
+        }
+    }
+
+    async handleEditDeck(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        
+        try {
+            this.showLoading();
+            const response = await fetch('edit_deck.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                window.location.href = await response.url;
+            } else {
+                this.showNotification('خطا در ویرایش Deck', 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            this.showNotification('خطا در ارتباط با سرور', 'error');
+        } finally {
+            this.hideLoading();
+        }
     }
 
     // Modal Functions
@@ -145,6 +223,32 @@ class SpaceDecksManager {
         setTimeout(() => {
             document.getElementById('card_title').focus();
         }, 500);
+    }
+
+    openEditDeckModal(deckId) {
+        this.showLoading();
+        fetch(`get_deck.php?id=${deckId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('edit_deck_id').value = data.deck.id;
+                    document.getElementById('edit_deck_name').value = data.deck.name;
+                    document.getElementById('edit_deck_description').value = data.deck.description || '';
+                    document.getElementById('edit_deck_color').value = data.deck.color || '#4a5568';
+                    
+                    const modal = new bootstrap.Modal(document.getElementById('editDeckModal'));
+                    modal.show();
+                } else {
+                    this.showNotification('خطا در بارگذاری اطلاعات Deck', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                this.showNotification('خطا در بارگذاری اطلاعات Deck', 'error');
+            })
+            .finally(() => {
+                this.hideLoading();
+            });
     }
 
     openEditCardModal(cardId) {
@@ -246,6 +350,46 @@ class SpaceDecksManager {
                 });
             } catch (error) {
                 console.error('Error:', error);
+            }
+        }
+    }
+
+    async deleteDeck(deckId) {
+        if (confirm('آیا از حذف این Deck اطمینان دارید؟ تمام Cards مربوطه نیز حذف خواهند شد.')) {
+            this.showLoading();
+            
+            try {
+                const formData = new FormData();
+                formData.append('deck_id', deckId);
+
+                const response = await fetch('delete_deck.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                this.hideLoading();
+                
+                if (data.success) {
+                    this.showNotification('Deck با موفقیت حذف شد', 'success');
+                    const deckElement = document.querySelector(`[data-deck-id="${deckId}"]`);
+                    if (deckElement) {
+                        deckElement.style.transition = 'all 0.3s ease';
+                        deckElement.style.opacity = '0';
+                        deckElement.style.height = '0';
+                        deckElement.style.margin = '0';
+                        
+                        setTimeout(() => {
+                            deckElement.remove();
+                        }, 300);
+                    }
+                } else {
+                    this.showNotification('خطا در حذف Deck: ' + (data.error || ''), 'error');
+                }
+            } catch (error) {
+                this.hideLoading();
+                console.error('Error:', error);
+                this.showNotification('خطا در ارتباط با سرور', 'error');
             }
         }
     }
@@ -458,4 +602,33 @@ class SpaceDecksManager {
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     window.spaceDecksManager = new SpaceDecksManager();
+    
+    // Global functions for onclick events
+    window.openAddCardModal = function(deckId) {
+        window.spaceDecksManager.openAddCardModal(deckId);
+    };
+    
+    window.openEditDeckModal = function(deckId) {
+        window.spaceDecksManager.openEditDeckModal(deckId);
+    };
+    
+    window.openEditCardModal = function(cardId) {
+        window.spaceDecksManager.openEditCardModal(cardId);
+    };
+    
+    window.openAddSubcardModal = function(parentCardId) {
+        window.spaceDecksManager.openAddSubcardModal(parentCardId);
+    };
+    
+    window.deleteDeck = function(deckId) {
+        window.spaceDecksManager.deleteDeck(deckId);
+    };
+    
+    window.deleteCard = function(cardId) {
+        window.spaceDecksManager.deleteCard(cardId);
+    };
+    
+    window.deleteSubcard = function(subcardId) {
+        window.spaceDecksManager.deleteSubcard(subcardId);
+    };
 });
