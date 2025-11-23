@@ -1,0 +1,382 @@
+/* css/style.css - نسخه حرفه‌ای و پیشرفته */
+
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    --dark-color: #2d3748;
+    --light-color: #f7fafc;
+    --space-bg: #1a202c;
+    --deck-bg: #2d3748;
+    --card-bg: #4a5568;
+    --accent-color: #ff6b6b;
+}
+
+/* استایل‌های پایه */
+body {
+    font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+    background: var(--primary-gradient);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* هیرو سکشن */
+.hero-section {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 120px 0 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
+    background-size: cover;
+}
+
+/* کارت‌های ویژگی */
+.feature-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+}
+
+.feature-card h5 {
+    color: #2d3748;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.feature-card p {
+    color: #4a5568;
+    font-size: 0.9rem;
+}
+
+/* کارت‌های آمار */
+.stats-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.stats-icon {
+    font-size: 3.5rem;
+    background: var(--secondary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+}
+
+.stats-card h3 {
+    color: #2d3748;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.stats-card p {
+    color: #4a5568;
+    font-size: 1rem;
+}
+
+/* مراحل */
+.step {
+    text-align: center;
+    padding: 15px 10px;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: var(--success-gradient);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.step h6 {
+    color: white;
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+/* سیستم Spaces و Decks پیشرفته */
+.spaces-container {
+    background: var(--space-bg);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.space-card {
+    background: var(--deck-bg);
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 1px solid #4a5568;
+}
+
+.space-header {
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: 15px 15px 0 0;
+    padding: 20px;
+    border-bottom: 1px solid #4a5568;
+}
+
+.space-body {
+    padding: 20px;
+    background: var(--deck-bg);
+}
+
+.deck-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.deck-card-advanced {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid #718096;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.deck-card-advanced:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    border-color: var(--accent-color);
+}
+
+.deck-header-advanced {
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 12px 12px 0 0;
+    border-bottom: 1px solid #718096;
+}
+
+.deck-body-advanced {
+    padding: 15px;
+    min-height: 200px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.card-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #718096;
+    transition: all 0.3s ease;
+    cursor: move;
+}
+
+.card-item:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: var(--accent-color);
+}
+
+.card-item.dragging {
+    opacity: 0.6;
+    transform: rotate(5deg);
+}
+
+.subcard-item {
+    background: rgba(255,255,255,0.02);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin: 5px 0 5px 15px;
+    border: 1px solid #4a5568;
+    font-size: 0.85rem;
+}
+
+/* انیمیشن‌های پیشرفته */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+    }
+}
+
+.animated-card {
+    animation: slideInUp 0.5s ease;
+}
+
+.pulse-glow {
+    animation: pulseGlow 2s infinite;
+}
+
+.fade-in-scale {
+    animation: fadeInScale 0.6s ease;
+}
+
+/* فوتور بهبود یافته */
+.footer-enhanced {
+    background: var(--dark-color);
+    color: white;
+    padding: 30px 0;
+    margin-top: 50px;
+}
+
+/* دکمه‌های پیشرفته */
+.btn-gradient {
+    background: var(--primary-gradient);
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    color: white;
+}
+
+/* مودال‌های پیشرفته */
+.modal-enhanced .modal-content {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    background: var(--space-bg);
+    color: white;
+}
+
+.modal-enhanced .modal-header {
+    background: var(--primary-gradient);
+    border-radius: 20px 20px 0 0;
+    border: none;
+}
+
+.modal-enhanced .modal-body {
+    background: var(--deck-bg);
+}
+
+.modal-enhanced .modal-footer {
+    background: var(--deck-bg);
+    border-radius: 0 0 20px 20px;
+    border: none;
+}
+
+/* اسکرول بار سفارشی */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--primary-gradient);
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-gradient);
+}
+
+/* ریسپانسیو */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 80px 0 50px;
+    }
+    
+    .feature-card, .stats-card {
+        margin-bottom: 20px;
+    }
+    
+    .deck-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .step h6 {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .feature-icon, .stats-icon {
+        font-size: 2.5rem;
+    }
+}
