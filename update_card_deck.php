@@ -1,61 +1,67 @@
-<?php
-// update_card_deck.php - نسخه پیشرفته
-include 'includes/config.php';
-include 'includes/functions.php';
+// اضافه کردن بررسی CSRF و هندلینگ خطا
+session_start();
+require_once 'config.php';
+require_once 'auth.php';
 
-if (!isLoggedIn()) {
-    echo json_encode(['success' => false, 'error' => 'Not logged in']);
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(['success' => false, 'error' => 'Method not allowed']);
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $card_id = $_POST['card_id'];
-    $new_deck_id = $_POST['new_deck_id'];
-    $user_id = $_SESSION['user_id'];
+// بررسی CSRF token
+if (!isset($_POST['csrf_token']) || !validateCsrfToken($_POST['csrf_token'])) {
+    echo json_encode(['success' => false, 'error' => 'Invalid CSRF token']);
+    exit;
+}
 
-    // Verify that the user has access to the card and the new deck
+try {
+    $card_id = $_POST['card_id'] ?? null;
+    $new_deck_id = $_POST['new_deck_id'] ?? null;
+    $user_id = getCurrentUserId();
+
+    if (!$card_id || !$new_deck_id) {
+        throw new Exception('Missing required parameters');
+    }
+
+    // بررسی دسترسی کاربر به کارت و دک جدید
     $stmt = $pdo->prepare("
-        SELECT c.id 
-        FROM cards c 
+        SELECT c.id FROM cards c 
         JOIN decks d ON c.deck_id = d.id 
         JOIN spaces s ON d.space_id = s.id 
-        LEFT JOIN space_members sm ON s.id = sm.space_id 
-        WHERE c.id = ? AND (s.user_id = ? OR sm.user_id = ?)
+        JOIN space_members sm ON s.id = sm.space_id 
+        WHERE c.id = ? AND sm.user_id = ?
     ");
-    $stmt->execute([$card_id, $user_id, $user_id]);
-    $card = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$card) {
-        echo json_encode(['success' => false, 'error' => 'Access denied']);
-        exit;
+    $stmt->execute([$card_id, $user_id]);
+    
+    if ($stmt->rowCount() === 0) {
+        throw new Exception('Access denied to card');
     }
 
-    // Also verify that the new deck is in the same space and user has access
+    // بررسی دسترسی به دک جدید
     $stmt = $pdo->prepare("
-        SELECT d.id 
-        FROM decks d 
+        SELECT d.id FROM decks d 
         JOIN spaces s ON d.space_id = s.id 
-        LEFT JOIN space_members sm ON s.id = sm.space_id 
-        WHERE d.id = ? AND (s.user_id = ? OR sm.user_id = ?)
+        JOIN space_members sm ON s.id = sm.space_id 
+        WHERE d.id = ? AND sm.user_id = ?
     ");
-    $stmt->execute([$new_deck_id, $user_id, $user_id]);
-    $deck = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$deck) {
-        echo json_encode(['success' => false, 'error' => 'Invalid deck']);
-        exit;
+    $stmt->execute([$new_deck_id, $user_id]);
+    
+    if ($stmt->rowCount() === 0) {
+        throw new Exception('Access denied to target deck');
     }
 
-    // Update the card's deck
+    // آپدیت دک کارت
     $stmt = $pdo->prepare("UPDATE cards SET deck_id = ? WHERE id = ?");
     $stmt->execute([$new_deck_id, $card_id]);
 
-    // Add experience for moving a card
+    // اضافه کردن تجربه
     addExperience($user_id, 2, $pdo);
 
     echo json_encode(['success' => true]);
-    exit;
-}
 
-echo json_encode(['success' => false, 'error' => 'Invalid request']);
-?>
+} catch (Exception $e) {
+    error_log("Drag & Drop Error: " . $e->getMessage());
+    echo json_encode(['success' => false, 'error' => 'خطا در انتقال کارت']);
+}

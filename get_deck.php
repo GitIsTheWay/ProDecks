@@ -1,30 +1,43 @@
 <?php
-// get_deck.php - دریافت اطلاعات Deck برای ویرایش
-include 'includes/config.php';
-include 'includes/functions.php';
+session_start();
+require_once 'config.php';
+require_once 'auth.php';
+require_once 'functions.php';
 
-if (!isLoggedIn()) {
-    echo json_encode(['success' => false, 'error' => 'Not logged in']);
+header('Content-Type: application/json');
+
+$deck_id = $_GET['id'] ?? null;
+$user_id = getCurrentUserId();
+
+if (!$deck_id) {
+    echo json_encode(['success' => false, 'error' => 'شناسه Deck ارسال نشده است']);
     exit;
 }
 
-$deck_id = $_GET['id'] ?? 0;
-$user_id = $_SESSION['user_id'];
+try {
+    // بررسی دسترسی کاربر به دک
+    $stmt = $pdo->prepare("
+        SELECT d.*, s.name as space_name 
+        FROM decks d 
+        JOIN spaces s ON d.space_id = s.id 
+        LEFT JOIN space_members sm ON s.id = sm.space_id 
+        WHERE d.id = ? AND (s.user_id = ? OR sm.user_id = ?)
+    ");
+    $stmt->execute([$deck_id, $user_id, $user_id]);
+    
+    if ($stmt->rowCount() === 0) {
+        throw new Exception('دسترسی به این Deck امکان‌پذیر نیست');
+    }
 
-// Verify user has access to deck
-$stmt = $pdo->prepare("
-    SELECT d.* 
-    FROM decks d 
-    JOIN spaces s ON d.space_id = s.id 
-    LEFT JOIN space_members sm ON s.id = sm.space_id 
-    WHERE d.id = ? AND (s.user_id = ? OR sm.user_id = ?)
-");
-$stmt->execute([$deck_id, $user_id, $user_id]);
-$deck = $stmt->fetch(PDO::FETCH_ASSOC);
+    $deck = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($deck) {
-    echo json_encode(['success' => true, 'deck' => $deck]);
-} else {
-    echo json_encode(['success' => false, 'error' => 'Deck not found']);
+    echo json_encode([
+        'success' => true,
+        'deck' => $deck
+    ]);
+
+} catch (Exception $e) {
+    error_log("Get Deck Error: " . $e->getMessage());
+    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }
 ?>

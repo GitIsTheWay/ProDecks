@@ -1,48 +1,55 @@
 <?php
-// update_card_order.php - نسخه پیشرفته
-include 'includes/config.php';
-include 'includes/functions.php';
+session_start();
+require_once 'config.php';
+require_once 'auth.php';
+require_once 'functions.php';
 
-if (!isLoggedIn()) {
-    echo json_encode(['success' => false, 'error' => 'Not logged in']);
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(['success' => false, 'error' => 'Method not allowed']);
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+try {
     $input = json_decode(file_get_contents('php://input'), true);
     $card_order = $input['card_order'] ?? [];
-    $user_id = $_SESSION['user_id'];
+    $user_id = getCurrentUserId();
 
-    try {
-        $pdo->beginTransaction();
-
-        foreach ($card_order as $card) {
-            // Verify user has access to this card
-            $stmt = $pdo->prepare("
-                SELECT c.id 
-                FROM cards c 
-                JOIN decks d ON c.deck_id = d.id 
-                JOIN spaces s ON d.space_id = s.id 
-                LEFT JOIN space_members sm ON s.id = sm.space_id 
-                WHERE c.id = ? AND (s.user_id = ? OR sm.user_id = ?)
-            ");
-            $stmt->execute([$card['card_id'], $user_id, $user_id]);
-            
-            if ($stmt->rowCount() > 0) {
-                $stmt = $pdo->prepare("UPDATE cards SET position = ? WHERE id = ?");
-                $stmt->execute([$card['position'], $card['card_id']]);
-            }
-        }
-
-        $pdo->commit();
-        echo json_encode(['success' => true]);
-        
-    } catch (Exception $e) {
-        $pdo->rollBack();
-        echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+    if (empty($card_order)) {
+        throw new Exception('داده‌ای برای به‌روزرسانی دریافت نشد');
     }
-    exit;
-}
 
-echo json_encode(['success' => false, 'error' => 'Invalid request']);
+    $pdo->beginTransaction();
+
+    foreach ($card_order as $card) {
+        $card_id = $card['card_id'] ?? null;
+        $position = $card['position'] ?? 0;
+
+        if (!$card_id) continue;
+
+        // بررسی دسترسی کاربر به کارت
+        $stmt = $pdo->prepare("
+            SELECT c.id FROM cards c 
+            JOIN decks d ON c.deck_id = d.id 
+            JOIN spaces s ON d.space_id = s.id 
+            LEFT JOIN space_members sm ON s.id = sm.space_id 
+            WHERE c.id = ? AND (s.user_id = ? OR sm.user_id = ?)
+        ");
+        $stmt->execute([$card_id, $user_id, $user_id]);
+        
+        if ($stmt->rowCount() > 0) {
+            $stmt = $pdo->prepare("UPDATE cards SET position = ? WHERE id = ?");
+            $stmt->execute([$position, $card_id]);
+        }
+    }
+
+    $pdo->commit();
+    echo json_encode(['success' => true, 'message' => 'ترتیب کارت‌ها با موفقیت به‌روزرسانی شد']);
+
+} catch (Exception $e) {
+    $pdo->rollBack();
+    error_log("Update Card Order Error: " . $e->getMessage());
+    echo json_encode(['success' => false, 'error' => 'خطا در به‌روزرسانی ترتیب کارت‌ها']);
+}
 ?>
